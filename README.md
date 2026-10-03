@@ -82,7 +82,7 @@ For a **2–5 minute walkthrough**: sign in; compare a role-specific overview wi
 
 Step 5 verified a clean Docker build, real PostgreSQL migrations, **137/137 PostgreSQL-backed backend tests**, four-role live authentication/RBAC, ticket lifecycle, comments/private notes, attachments, monitoring/alerts, WebSocket delivery, and persistence across `down` → `up`. Step 6 verified the fictional seed and representative role flows on the same real stack. These are historical local results, not claims of a successful public CI run. The [testing guide](docs/TESTING.md) separates automated suites from manual/live verification; rerun the commands there for your environment.
 
-Important boundaries: external AI provider success and production RAG are unverified; local AI uses a labeled fallback. Demo telemetry is simulated, not real fleet monitoring. Production malware scanning, TLS, backup/restore, failover, full penetration testing, formal WCAG certification, and large-scale load/concurrency testing remain unverified. The existing whole-backend Mypy run has seven errors in unrelated files; a remote CI pass has not been observed. No production-readiness or security-certification claim is made.
+Important boundaries: external AI provider success and production RAG are unverified; local AI uses a labeled fallback. Demo telemetry is simulated, not real fleet monitoring. Production malware scanning, TLS, backup/restore, failover, full penetration testing, formal WCAG certification, and large-scale load/concurrency testing remain unverified. A local whole-backend Mypy run passed in Step 9; a remote CI pass has not been observed. No production-readiness or security-certification claim is made.
 
 ## Documentation
 

@@ -6,9 +6,10 @@ The resumed Step 5 run executed 137/137 backend tests against disposable Postgre
 Compose build/startup and Alembic migration. It also exercised four-role authentication/RBAC,
 ticket/comment/attachment flows, monitoring and alerts, WebSocket delivery, and persistence after a
 Compose restart. Step 6 exercised the fictional enterprise/demo seed and representative role
-journeys. These are historical local observations, not a public CI result. The whole-backend Mypy
-check retains seven pre-existing errors in unrelated files; do not interpret the CI configuration
-as proof of a green remote run. See the commands below for reruns on a disposable database.
+journeys. These are historical local observations, not a public CI result. Step 7 recorded seven
+whole-backend Mypy errors; a fresh local Step 9 check passed with no issues in 109 source files.
+Do not interpret the CI configuration as proof of a green remote run. See the commands below for
+reruns on a disposable database.
 
 Each phase maintains fast quality gates for both runtimes.
 

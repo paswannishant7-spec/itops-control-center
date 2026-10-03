@@ -17,8 +17,8 @@ has read-only repository permission; it does not receive production credentials 
 Dependabot checks npm, pip, Docker, and Actions dependencies weekly.
 
 This table describes configured gates, not a successful remote run. No public GitHub CI result has
-been observed. Step 7 recorded seven pre-existing whole-backend Mypy errors, so the current
-workflow must not be described as green until those errors and any other remote failures are fixed.
+been observed. Step 7 recorded seven whole-backend Mypy errors; a fresh local Step 9 run passed
+with no issues in 109 source files. Remote workflow status remains unverified.
 
 ## Continuous delivery
 

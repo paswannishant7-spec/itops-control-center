@@ -38,7 +38,7 @@ Argon2 hashes, short-lived JWT access tokens, rotating refresh credentials in Ht
 
 ### Demo and limitations
 
-Show the three [live-demo screenshots](../README.md#product-tour) as an overview → queue → audit narrative, then follow the [2–5 minute flow](../README.md#run-the-local-demo). External AI/RAG provider success, production malware scanning/TLS/backup/failover, formal WCAG and penetration audits, and large-scale load testing remain unverified. Monitoring telemetry is simulated. Whole-backend Mypy has seven pre-existing errors, and remote CI has not been observed green. A sensible next step is to close those verification gaps before considering production use.
+Show the three [live-demo screenshots](../README.md#product-tour) as an overview → queue → audit narrative, then follow the [2–5 minute flow](../README.md#run-the-local-demo). External AI/RAG provider success, production malware scanning/TLS/backup/failover, formal WCAG and penetration audits, and large-scale load testing remain unverified. Monitoring telemetry is simulated. A local whole-backend Mypy run passed in Step 9, but remote CI has not been observed green. A sensible next step is to close the remaining verification gaps before considering production use.
 
 ### What I learned
 
