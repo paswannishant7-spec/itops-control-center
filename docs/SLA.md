@@ -36,4 +36,4 @@ Ticket list queries additionally accept `sla_state`. The worker is not exposed a
 
 ## Acceptance boundary
 
-Local SQLite integration and direct calculation tests validate behavior; offline PostgreSQL migration SQL validates dialect generation. Live PostgreSQL verification must still inspect partial indexes, `SKIP LOCKED` multi-worker behavior, backfill results, and timezone data availability. Docker worker lifecycle and browser acceptance also remain pending in this workspace.
+Earlier phase-local SQLite calculation tests and offline migration checks were followed by Step 5/6 live PostgreSQL migrations, SLA/ticket journeys, and Docker worker lifecycle checks. Those later runs did not establish exhaustive multi-worker `SKIP LOCKED` contention, timezone coverage, or production-scale behavior; those remain separate acceptance work.

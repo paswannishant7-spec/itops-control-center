@@ -7,14 +7,18 @@ ref and bounded job timeouts.
 
 | Job        | Gates                                                                                                                                    |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Frontend   | npm advisory audit, Oxlint, application/E2E TypeScript, 31 Vitest tests, production build, six Playwright desktop/mobile cases, Prettier |
-| Backend    | Python advisory audit, empty PostgreSQL 17 + pgvector migration/check, Ruff, strict Mypy, 132 Pytest tests and 90% coverage floor        |
+| Frontend   | npm advisory audit, Oxlint, application/E2E TypeScript, Vitest, production build, Playwright desktop/mobile cases, Prettier |
+| Backend    | Python advisory audit, empty PostgreSQL 17 + pgvector migration/check, Ruff, Mypy, Pytest and coverage floor |
 | Agent      | Ruff, strict Mypy, and four Pytest cases                                                                                                 |
 | Containers | Development and production Compose rendering plus backend/frontend image builds                                                          |
 
 JUnit, coverage, and Playwright reports are retained as short-lived workflow artifacts. The workflow
 has read-only repository permission; it does not receive production credentials or deploy.
 Dependabot checks npm, pip, Docker, and Actions dependencies weekly.
+
+This table describes configured gates, not a successful remote run. No public GitHub CI result has
+been observed. Step 7 recorded seven pre-existing whole-backend Mypy errors, so the current
+workflow must not be described as green until those errors and any other remote failures are fixed.
 
 ## Continuous delivery
 

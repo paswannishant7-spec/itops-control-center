@@ -22,11 +22,9 @@ The browser never receives provider, database, device-agent, or malware-scanner 
 frontend hides unavailable actions for usability, while the API independently authenticates,
 authorizes, scopes, validates, and audits every operation.
 
-## Phase 1 boundaries
+## Application boundaries
 
-The repository establishes two deployable components: a static React SPA and a FastAPI API. The API uses an application factory, central settings, request context middleware, structured logging, controlled errors, explicit CORS, and versioned routes.
-
-No persistence abstraction is introduced before the Phase 2 schema and transaction design. No queue abstraction is introduced before Phase 7 defines retry and idempotency requirements. This keeps the foundation executable without pretending infrastructure exists.
+The static React SPA and FastAPI API use an application factory, central settings, request context middleware, structured logging, controlled errors, explicit CORS, and versioned routes. PostgreSQL-backed services and workers are present in the current implementation; earlier phase-by-phase notes below describe their design history, not unfinished work.
 
 ## Dependency direction
 
@@ -36,7 +34,7 @@ API router -> schema -> service/domain -> repository
 core configuration/middleware <- API assembly
 ```
 
-Route handlers must remain thin. Database commits will belong to application services. Infrastructure SDK types must not cross into domain interfaces.
+Route handlers remain thin. Application services own database commits; infrastructure SDK types do not cross into domain interfaces.
 
 ## Health semantics
 

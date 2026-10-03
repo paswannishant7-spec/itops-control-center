@@ -36,6 +36,7 @@ This directory contains the public technical documentation for ITOps Control Cen
 
 ## Development and delivery
 
+- [Portfolio and interview brief](PORTFOLIO.md) — case-study story, resume/LinkedIn wording, and technical talking points.
 - [Local setup](SETUP.md) — verified Compose startup, configuration, migrations, and development commands.
 - [Testing](TESTING.md) — suites, commands, coverage, and acceptance boundaries.
 - [Deployment and operations](DEPLOYMENT.md) — production configuration, upgrades, rollback, and incidents.

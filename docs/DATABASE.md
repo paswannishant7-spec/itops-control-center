@@ -4,6 +4,8 @@
 
 PostgreSQL 17 is the system of record. The local and CI image includes pgvector. SQLAlchemy 2 provides typed ORM and Core APIs, Psycopg 3 provides the async PostgreSQL driver, and Alembic owns schema changes.
 
+Step 5/6 subsequently exercised Alembic migrations and application tests against a disposable live PostgreSQL stack, including persistence after Compose restart. The phase-by-phase notes below describe what was known when each revision was introduced; earlier "pending" statements are superseded by that later verification. Detailed constraint inspection, downgrade rehearsal, and concurrent multi-worker behavior are not claimed complete.
+
 The application uses `postgresql+psycopg` URLs. Credentials are represented as Pydantic `SecretStr` values and must not be logged. Connection pools use pre-ping and bounded size, overflow, wait time, and connection timeout.
 
 ## Migration policy
@@ -47,7 +49,7 @@ python -m scripts.seed
 
 Revision `20260908_0003` adds `roles`, `permissions`, `role_permissions`, `user_roles`, and `role_assignment_events`. The revision freezes the initial four-role/60-permission matrix so future code changes cannot alter historical migration behavior. Assignment and grant tables use composite keys and restrictive foreign keys; assignment history records actor, target, before/after role codes, reason, request ID, and timestamp. JSON is limited to historical snapshots, not live memberships.
 
-Normal runtime does not recreate catalog mappings or elevate existing accounts. See [bootstrap and upgrade](RBAC.md#bootstrap-and-upgrade). Downgrading this revision removes access data and history and is only appropriate for disposable migration verification. Offline SQL generation passed locally; online PostgreSQL upgrade and schema comparison remain pending.
+Normal runtime does not recreate catalog mappings or elevate existing accounts. See [bootstrap and upgrade](RBAC.md#bootstrap-and-upgrade). Downgrading this revision removes access data and history and is only appropriate for disposable migration verification. The later Step 5/6 PostgreSQL migration run supersedes the original offline-only acceptance boundary; a complete schema comparison is not claimed.
 
 ## Phase 5 directory schema
 
@@ -55,7 +57,7 @@ Revision `20260909_0004` creates `departments`, `locations`, `teams`, `team_memb
 
 Team membership is an interval, not a replaceable join row: each record has `started_at` and nullable `ended_at`. A PostgreSQL partial unique index permits only one active interval for a user/team pair, while preserving earlier assignments. Services end active intervals instead of deleting them. Department, location, and team records are soft-deactivated; referenced departments or locations cannot be retired while active users or teams still depend on them.
 
-The same revision adds `department:view`, `department:manage`, `location:view`, and `location:manage` plus frozen system-role mappings, bringing the current catalog to 64 permissions. The downgrade removes all Phase 5 data and fields and is appropriate only for disposable migration verification. Offline upgrade SQL generation passes locally; the online PostgreSQL upgrade, constraint inspection, downgrade rehearsal, and concurrency checks remain pending.
+The same revision adds `department:view`, `department:manage`, `location:view`, and `location:manage` plus frozen system-role mappings, bringing the current catalog to 64 permissions. The downgrade removes all Phase 5 data and fields and is appropriate only for disposable migration verification. Step 5/6 exercised the online PostgreSQL upgrade; exhaustive constraint inspection, downgrade rehearsal, and concurrency checks remain unverified.
 
 ## Phase 6 ticket schema
 
@@ -63,7 +65,7 @@ Revision `20260909_0005` creates `ticket_categories`, `ticket_subcategories`, `t
 
 Comments distinguish public messages from internal notes. Attachment rows store private object keys, original names, inspected MIME type, byte size, and SHA-256 digest—not file bytes. Assignment rows are historical intervals protected by a PostgreSQL partial unique index allowing one active assignment per ticket. Event rows retain bounded before/after operational state, reason, actor, request ID, and timestamp.
 
-The schema indexes status, priority, requester, team, technician, department, location, asset, category, subcategory, and chronological ticket access paths. The downgrade destroys all Phase 6 ticket data and is only suitable for disposable verification. Offline PostgreSQL SQL generation passes through head; online migration, schema comparison, partial-index inspection, and concurrency checks remain pending.
+The schema indexes status, priority, requester, team, technician, department, location, asset, category, subcategory, and chronological ticket access paths. The downgrade destroys all Phase 6 ticket data and is only suitable for disposable verification. Step 5/6 exercised the online PostgreSQL migration and ticket flows; full schema comparison, partial-index inspection, and concurrency checks are not claimed complete.
 
 ## Phase 7 SLA schema
 

@@ -78,7 +78,8 @@ Ticket creation, edits, assignment, status changes, comments, and attachments ap
 
 ## Acceptance boundary
 
-Local SQLite integration tests, direct service tests, frontend component tests, lint/type/build gates, and offline PostgreSQL migration generation pass. Full acceptance still requires online PostgreSQL migration/schema and concurrency checks, Docker volume persistence, a live employee/technician/admin browser journey, and production attachment security controls.
+Earlier phase-local SQLite, service, frontend, and offline migration checks were followed by Step 5/6 live PostgreSQL migrations, Docker volume persistence, and employee/technician/admin ticket journeys, including comments and attachments. Exhaustive concurrency checks and production attachment-malware controls remain unverified.
+
 ## Asset relationships
 
 Phase 13 converts `tickets.asset_id` from an indexed placeholder UUID into a restrictive foreign key
