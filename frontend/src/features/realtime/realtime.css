@@ -1,0 +1,33 @@
+.realtime-status {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(7, 16, 23, 0.92);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.22);
+  font-size: 0.74rem;
+  backdrop-filter: blur(10px);
+}
+
+.realtime-status span {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: #f0b85a;
+}
+
+.realtime-status--live span {
+  background: var(--accent);
+  box-shadow: 0 0 0.6rem rgba(98, 230, 181, 0.55);
+}
+
+.realtime-status--paused span {
+  background: #ef817c;
+}

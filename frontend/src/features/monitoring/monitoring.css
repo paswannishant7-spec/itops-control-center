@@ -1,0 +1,185 @@
+.monitoring-page {
+  min-height: 100vh;
+  padding: 0 5vw 4rem;
+  background: #f2f6f5;
+  color: #17312c;
+}
+.monitoring-topbar {
+  min-height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d4e0dd;
+}
+.monitoring-topbar div {
+  display: flex;
+  gap: 1.2rem;
+}
+.monitoring-heading {
+  padding: 3.4rem 0 2rem;
+}
+.monitoring-heading h1 {
+  font-size: clamp(2.3rem, 5vw, 4.5rem);
+  letter-spacing: -0.055em;
+  margin: 0.25rem 0;
+}
+.monitoring-panel {
+  background: white;
+  border: 1px solid #d8e3e0;
+  border-radius: 1rem;
+  padding: 1.35rem;
+  box-shadow: 0 14px 40px rgba(20, 57, 48, 0.05);
+}
+.monitoring-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) minmax(20rem, 1.4fr);
+  gap: 1rem;
+}
+.enrollment-panel {
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+}
+.enrollment-panel form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.8rem;
+  align-items: end;
+}
+.monitoring-panel label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.monitoring-panel input,
+.monitoring-panel select {
+  padding: 0.7rem;
+  border: 1px solid #bccdc8;
+  border-radius: 0.5rem;
+  background: white;
+}
+.monitoring-panel button {
+  border: 0;
+  border-radius: 0.5rem;
+  background: #176b58;
+  color: white;
+  padding: 0.72rem 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.enrollment-secret {
+  grid-column: 1 / -1;
+  background: #fff7d9;
+  border: 1px solid #e5ce76;
+  border-radius: 0.65rem;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.enrollment-secret code {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.status-filter {
+  max-width: 13rem;
+  margin: 1rem 0;
+}
+.agent-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.agent-list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  background: #f2f7f5;
+  color: inherit;
+}
+.agent-list button > span:first-child,
+.agent-identity {
+  display: grid;
+  gap: 0.2rem;
+}
+.agent-list small,
+.agent-identity small,
+.agent-identity span {
+  color: #657a74;
+}
+.agent-list .selected button {
+  outline: 2px solid #2f846f;
+}
+.agent-status {
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+.status-online {
+  background: #d8f4e4;
+  color: #12623e;
+}
+.status-offline,
+.status-disabled {
+  background: #e5e8e7;
+  color: #4f5c58;
+}
+.status-degraded {
+  background: #fff0c7;
+  color: #765000;
+}
+.status-unregistered {
+  background: #dce9f7;
+  color: #275f94;
+}
+.metric-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+.metric-grid > div {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  background: #f5f8f7;
+  border-radius: 0.65rem;
+}
+.metric-grid progress {
+  width: 100%;
+  accent-color: #188269;
+}
+.disable-form {
+  border-top: 1px solid #dce5e2;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  display: flex;
+  align-items: end;
+  gap: 0.7rem;
+}
+.disable-form button {
+  background: #97332d;
+}
+.monitoring-error {
+  background: #fff0ef;
+  color: #942e29;
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+}
+@media (max-width: 850px) {
+  .monitoring-grid,
+  .enrollment-panel {
+    grid-template-columns: 1fr;
+  }
+  .enrollment-panel form {
+    grid-template-columns: 1fr;
+  }
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,130 @@
+name: itops-control-center
+
+x-api-environment: &api-environment
+  ITOPS_ENVIRONMENT: production
+  ITOPS_LOG_LEVEL: ${ITOPS_LOG_LEVEL:-INFO}
+  ITOPS_LOG_JSON: "true"
+  ITOPS_CORS_ORIGINS: ${ITOPS_CORS_ORIGINS:?Set the exact public browser origin as a JSON array}
+  ITOPS_DATABASE_URL: ${ITOPS_DATABASE_URL:?Set the production PostgreSQL URL}
+  ITOPS_DATABASE_POOL_SIZE: ${ITOPS_DATABASE_POOL_SIZE:-10}
+  ITOPS_DATABASE_MAX_OVERFLOW: ${ITOPS_DATABASE_MAX_OVERFLOW:-20}
+  ITOPS_DATABASE_POOL_TIMEOUT_SECONDS: ${ITOPS_DATABASE_POOL_TIMEOUT_SECONDS:-10}
+  ITOPS_DATABASE_CONNECT_TIMEOUT_SECONDS: ${ITOPS_DATABASE_CONNECT_TIMEOUT_SECONDS:-5}
+  ITOPS_JWT_SECRET: ${ITOPS_JWT_SECRET:?Set a random secret of at least 32 characters}
+  ITOPS_SECURE_COOKIES: "true"
+  ITOPS_LOGIN_RATE_LIMIT_ATTEMPTS: ${ITOPS_LOGIN_RATE_LIMIT_ATTEMPTS:-5}
+  ITOPS_LOGIN_RATE_LIMIT_WINDOW_SECONDS: ${ITOPS_LOGIN_RATE_LIMIT_WINDOW_SECONDS:-60}
+  ITOPS_REFRESH_RATE_LIMIT_ATTEMPTS: ${ITOPS_REFRESH_RATE_LIMIT_ATTEMPTS:-20}
+  ITOPS_REFRESH_RATE_LIMIT_WINDOW_SECONDS: ${ITOPS_REFRESH_RATE_LIMIT_WINDOW_SECONDS:-60}
+  ITOPS_ATTACHMENT_STORAGE_PATH: /var/lib/itops/attachments
+  ITOPS_ATTACHMENT_MAX_BYTES: ${ITOPS_ATTACHMENT_MAX_BYTES:-10485760}
+  ITOPS_ATTACHMENT_CLAMAV_HOST: ${ITOPS_ATTACHMENT_CLAMAV_HOST:?Set a private ClamAV host}
+  ITOPS_ATTACHMENT_CLAMAV_PORT: ${ITOPS_ATTACHMENT_CLAMAV_PORT:-3310}
+  ITOPS_ATTACHMENT_SCAN_TIMEOUT_SECONDS: ${ITOPS_ATTACHMENT_SCAN_TIMEOUT_SECONDS:-5}
+  ITOPS_ATTACHMENT_SCAN_REQUIRED: "true"
+  ITOPS_AI_PROVIDER: ${ITOPS_AI_PROVIDER:-disabled}
+  ITOPS_AI_MODEL: ${ITOPS_AI_MODEL:-gpt-5.6-luna}
+  ITOPS_AI_EMBEDDING_MODEL: ${ITOPS_AI_EMBEDDING_MODEL:-text-embedding-3-small}
+  ITOPS_AI_EMBEDDING_DIMENSIONS: ${ITOPS_AI_EMBEDDING_DIMENSIONS:-1536}
+  ITOPS_AI_PROVIDER_TIMEOUT_SECONDS: ${ITOPS_AI_PROVIDER_TIMEOUT_SECONDS:-20}
+  ITOPS_OPENAI_API_KEY: ${ITOPS_OPENAI_API_KEY:-}
+  ITOPS_SLA_WORKER_INTERVAL_SECONDS: ${ITOPS_SLA_WORKER_INTERVAL_SECONDS:-60}
+  ITOPS_SLA_WORKER_BATCH_SIZE: ${ITOPS_SLA_WORKER_BATCH_SIZE:-100}
+  ITOPS_MONITORING_EXPECTED_HEARTBEAT_SECONDS: ${ITOPS_MONITORING_EXPECTED_HEARTBEAT_SECONDS:-60}
+  ITOPS_MONITORING_HEARTBEAT_TIMEOUT_SECONDS: ${ITOPS_MONITORING_HEARTBEAT_TIMEOUT_SECONDS:-180}
+  ITOPS_MONITORING_METRIC_MIN_INTERVAL_SECONDS: ${ITOPS_MONITORING_METRIC_MIN_INTERVAL_SECONDS:-30}
+  ITOPS_MONITORING_RETENTION_DAYS: ${ITOPS_MONITORING_RETENTION_DAYS:-30}
+  ITOPS_MONITORING_WORKER_INTERVAL_SECONDS: ${ITOPS_MONITORING_WORKER_INTERVAL_SECONDS:-60}
+  ITOPS_REALTIME_AUTH_TIMEOUT_SECONDS: ${ITOPS_REALTIME_AUTH_TIMEOUT_SECONDS:-5}
+  ITOPS_REALTIME_POLL_INTERVAL_SECONDS: ${ITOPS_REALTIME_POLL_INTERVAL_SECONDS:-1}
+  ITOPS_REALTIME_HEARTBEAT_SECONDS: ${ITOPS_REALTIME_HEARTBEAT_SECONDS:-20}
+  ITOPS_REALTIME_BATCH_SIZE: ${ITOPS_REALTIME_BATCH_SIZE:-100}
+  ITOPS_REALTIME_RETENTION_HOURS: ${ITOPS_REALTIME_RETENTION_HOURS:-24}
+
+services:
+  database:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  migrate:
+    image: ${ITOPS_API_IMAGE:?Set an immutable API image tag or digest}
+    command: ["sh", "-c", "alembic upgrade head && python -m scripts.seed"]
+    environment:
+      <<: *api-environment
+      ITOPS_INITIAL_ADMIN_EMAIL: ${ITOPS_INITIAL_ADMIN_EMAIL:-}
+      ITOPS_INITIAL_ADMIN_NAME: ${ITOPS_INITIAL_ADMIN_NAME:-Platform Administrator}
+      ITOPS_INITIAL_ADMIN_PASSWORD: ${ITOPS_INITIAL_ADMIN_PASSWORD:-}
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+    restart: "no"
+
+  api:
+    image: ${ITOPS_API_IMAGE:?Set an immutable API image tag or digest}
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *api-environment
+    volumes:
+      - attachment_data:/var/lib/itops/attachments
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+  worker:
+    image: ${ITOPS_API_IMAGE:?Set an immutable API image tag or digest}
+    command: ["python", "-m", "scripts.sla_worker"]
+    environment:
+      <<: *api-environment
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      disable: true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+  monitoring-worker:
+    image: ${ITOPS_API_IMAGE:?Set an immutable API image tag or digest}
+    command: ["python", "-m", "scripts.monitoring_worker"]
+    environment:
+      <<: *api-environment
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      disable: true
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+  frontend:
+    image: ${ITOPS_FRONTEND_IMAGE:?Set an immutable frontend image tag or digest}
+    ports:
+      - "${ITOPS_HTTP_BIND:-127.0.0.1}:${ITOPS_HTTP_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    init: true
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  attachment_data:

@@ -1,0 +1,62 @@
+.sla-settings {
+  min-height: 100vh;
+  padding: 1.5rem clamp(1rem, 3vw, 3rem) 4rem;
+}
+
+.matrix-grid,
+.sla-config-grid,
+.field-pair {
+  display: grid;
+  gap: 1rem;
+}
+
+.matrix-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.matrix-grid label,
+.side-form label {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.sla-config-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.field-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.config-list {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0;
+  list-style: none;
+}
+
+.config-list li {
+  display: grid;
+  gap: 0.2rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.config-list span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.checkbox-line {
+  grid-template-columns: auto 1fr !important;
+  align-items: center;
+}
+
+@media (max-width: 800px) {
+  .sla-config-grid {
+    grid-template-columns: 1fr;
+  }
+}

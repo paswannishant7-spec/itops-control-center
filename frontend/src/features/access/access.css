@@ -1,0 +1,92 @@
+.access-page {
+  padding: 0 clamp(1rem, 5vw, 4rem) 4rem;
+  max-width: 100rem;
+  margin: auto;
+}
+.access-heading {
+  margin: 3rem 0;
+}
+.access-heading h1 {
+  max-width: none;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.1;
+}
+.access-heading > p:last-child,
+.assignment-panel > p {
+  color: var(--muted);
+}
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 1rem;
+}
+.role-grid article,
+.assignment-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+.role-grid h2 {
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+.role-grid summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+.role-grid ul {
+  padding-left: 1rem;
+  max-height: 24rem;
+  overflow: auto;
+  line-height: 1.8;
+  font-size: 0.8rem;
+}
+.assignment-panel {
+  max-width: 46rem;
+  margin-top: 2rem;
+}
+.assignment-panel form {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+.assignment-panel input:not([type='checkbox']),
+.assignment-panel textarea {
+  min-width: 0;
+  padding: 0.8rem;
+  color: inherit;
+  background: #071017;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+.assignment-panel fieldset {
+  display: grid;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+}
+.assignment-panel fieldset label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.assignment-panel button,
+.access-page > p button {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: var(--accent);
+  color: #04110d;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+}
+.assignment-panel button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.access-page :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
