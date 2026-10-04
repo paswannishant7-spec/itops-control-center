@@ -1,5 +1,19 @@
 # Product demo runbook
 
+## Hosted reviewer access
+
+The hosted version is a **controlled portfolio demonstration, not a production service**. A
+reviewer receives a separate temporary account and password privately from the operator;
+credentials are never published in this repository, embedded in the frontend, or shown in
+screenshots. Open only
+the operator-provided HTTPS hostname. If the browser cannot establish valid HTTPS, do not sign in.
+Use fictional ticket content only; do not upload real personal or company data. Role permissions
+still come from the database. Request a role-specific account for Employee, Technician, or Manager
+workflows; the operator demonstrates Admin functionality without sharing Admin credentials. The
+shared enterprise-seed password is never issued to reviewers. The operator disables
+reviewer access and resets fictional changes after a demonstration. The local setup below is for a
+disposable developer environment, not instructions to seed a public server.
+
 This runbook supports a repeatable portfolio demonstration of the ITOps Control Center. Use the full-stack path for live mutations and authorization. The checked-in images were captured from the running PostgreSQL-backed fictional demo, not from fixture responses.
 
 ## Screenshot provenance

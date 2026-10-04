@@ -3,6 +3,7 @@
 ## Authentication
 
 - Passwords are hashed with Argon2id through `argon2-cffi`; plaintext passwords are never stored or logged.
+- Login payloads with an empty identifier/password, malformed email, missing fields, or extra fields return `422` before authentication. A well-formed unknown account or wrong password returns the same generic `401`. Neither failure creates a session; successful credentials return `200` and the database-backed user identity.
 - Passwords are limited to 12–128 characters and require upper/lowercase letters, a digit, and a symbol for locally managed accounts.
 - Access tokens are HS256 JWTs with issuer, audience, subject, session ID, unique ID, issued-at, expiry, and token-type claims. They expire after 10 minutes by default.
 - Access tokens remain in frontend memory. They are not written to local or session storage.

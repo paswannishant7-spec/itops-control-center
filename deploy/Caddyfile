@@ -1,0 +1,7 @@
+{$ITOPS_DEMO_HOST} {
+    reverse_proxy frontend:80
+}
+
+http://127.0.0.1:2018 {
+    reverse_proxy frontend:80
+}
