@@ -1,4 +1,4 @@
-FROM python:3.13.11-slim
+FROM python:3.14.7-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 RUN addgroup --system app && adduser --system --ingroup app app && mkdir -p /var/lib/itops/attachments && chown -R app:app /var/lib/itops
