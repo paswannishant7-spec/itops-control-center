@@ -235,6 +235,12 @@ async def test_real_authentication_rbac_lifecycle_and_session_matrix(client) -> 
         assert response.status_code == expected, response.text
         assert "itops_refresh" not in response.cookies
 
+    for payload in ({}, {"email": "nishant.paswan@example.com"}, {"password": PASSWORD}):
+        client.cookies.clear()
+        response = await client.post("/api/v1/auth/login", json=payload)
+        assert response.status_code == 422
+        assert "itops_refresh" not in response.cookies
+
     assert (await client.post("/api/v1/auth/refresh")).status_code == 401
     assert (await client.get("/api/v1/access/roles")).status_code == 401
 

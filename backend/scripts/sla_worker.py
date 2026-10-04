@@ -3,6 +3,7 @@
 import asyncio
 import signal
 from contextlib import suppress
+from pathlib import Path
 
 import structlog
 
@@ -27,6 +28,7 @@ async def run() -> None:
                 inspected, changed = await SlaService(session).run_once(
                     limit=settings.sla_worker_batch_size
                 )
+            Path("/tmp/itops-sla-worker.heartbeat").touch()
             log.info("sla_worker_cycle", inspected=inspected, changed=changed)
         except Exception:
             log.exception("sla_worker_cycle_failed")

@@ -3,6 +3,7 @@
 import asyncio
 import signal
 from contextlib import suppress
+from pathlib import Path
 
 import structlog
 
@@ -27,6 +28,7 @@ async def run() -> None:
                 offline, metrics, heartbeats = await MonitoringService(
                     session, settings
                 ).reconcile()
+            Path("/tmp/itops-monitoring-worker.heartbeat").touch()
             log.info(
                 "monitoring_worker_cycle",
                 agents_marked_offline=offline,

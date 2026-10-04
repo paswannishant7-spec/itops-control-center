@@ -67,6 +67,10 @@ async function mockApi(
       else await json(route, 200, tokenResponse())
       return
     }
+    if (url.pathname.endsWith('/auth/logout')) {
+      await json(route, 200, { message: 'Logged out' })
+      return
+    }
     if (url.pathname.endsWith('/access/me')) {
       await json(route, 200, { roles: ['ADMIN'], permissions: grants })
       return
@@ -241,6 +245,8 @@ test('closed mobile navigation cannot receive keyboard focus', async ({
   await page.getByRole('button', { name: 'Open navigation' }).click()
   await expect(sidebar).toHaveClass(/is-open/)
   await expect(sidebar.getByRole('link', { name: 'Overview' })).toBeVisible()
+  await sidebar.getByRole('button', { name: 'Sign out' }).click()
+  await expect(page).toHaveURL(/\/login$/)
 })
 
 test('keeps authentication failures controlled', async ({ page }) => {

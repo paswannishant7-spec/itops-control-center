@@ -8,7 +8,7 @@
 
 .app-sidebar {
   position: sticky;
-  z-index: 40;
+  z-index: 41;
   top: 0;
   height: 100vh;
   display: flex;
